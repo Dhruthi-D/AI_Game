@@ -475,7 +475,7 @@ RESULT_HTML = """
         <div class="score-card">
           <div class="score-title">Time</div>
           <div class="score-value" id="timePretty">{{ duration_seconds }}s</div>
-          <div class="score-sub" style="font-size:12px; color: var(--text-muted); margin-top:6px;">Optimal: —</div>
+          <div class="score-sub" style="font-size:12px; color: var(--text-muted); margin-top:6px;"></div>
         </div>
         <div class="score-card">
           <div class="score-title">Result</div>
