@@ -18,16 +18,25 @@ HOME_HTML = """
     <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />
     <title>Start • Tic-Tac-Toe AI</title>
     <style>
-      :root { --primary: #f1f5f9; --accent: #3b82f6; --bg: #0f172a; --card-bg: #1e293b; --border: #334155; --text-muted: #94a3b8; }
-      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--bg); color: var(--primary); }
-      .card { width: min(520px, 92vw); background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+      :root { --primary: #e5e7eb; --accent: #7a2436; --bg: #0b0f1a; --card-bg: #111827; --border: #273244; --text-muted: #9aa4b2; }
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; min-height: 100vh; display: grid; place-items: center; background:
+        radial-gradient(900px 420px at 85% -10%, rgba(122,36,54,.14), transparent 60%),
+        radial-gradient(720px 380px at 10% 110%, rgba(122,36,54,.08), transparent 60%),
+        radial-gradient(600px 300px at 0% 100%, rgba(34,197,94,.06), transparent 60%),
+        linear-gradient(180deg, #0b0f1a, #0e1422);
+        color: var(--primary); position: relative; }
+      body::after { content: ""; position: fixed; inset: 0; pointer-events: none; background:
+        radial-gradient(1200px 700px at 50% -10%, rgba(0,0,0,.25), transparent 60%),
+        radial-gradient(1200px 800px at 50% 120%, rgba(0,0,0,.35), transparent 60%); }
+      .card { width: min(520px, 92vw); background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 22px; box-shadow: 0 20px 50px rgba(0,0,0,0.45), 0 0 0 1px rgba(122,36,54,.10) inset; }
       h1 { margin: 6px 0 14px; font-size: 24px; }
       .row { display:flex; gap: 10px; align-items:center; margin-bottom: 12px; }
       label { width: 88px; color: var(--text-muted); }
       input { flex: 1; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--primary); }
-      button { background: var(--accent); color: #fff; border: none; padding: 10px 14px; border-radius: 10px; cursor: pointer; }
+      button { background: linear-gradient(180deg, #7a2436, #5a1c2a); color: #fff; border: 1px solid rgba(255,255,255,.06); padding: 10px 14px; border-radius: 10px; cursor: pointer; box-shadow: 0 12px 28px rgba(122,36,54,.32); transition: transform .12s ease, box-shadow .2s ease, filter .2s ease; min-width: 96px; text-align: center; }
+      button:hover { transform: translateY(-1px); box-shadow: 0 16px 36px rgba(122,36,54,.42); filter: saturate(1.01); }
       .tile-group { display: flex; gap: 8px; flex-wrap: wrap; }
-      .tile { padding: 10px 16px; border: 2px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--primary); cursor: pointer; transition: all 0.2s ease; text-align: center; min-width: 80px; }
+      .tile { padding: 10px 16px; border: 2px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--primary); cursor: pointer; transition: all 0.2s ease; text-align: center; min-width: 80px; box-shadow: inset 0 1px 0 rgba(255,255,255,.04); }
       .tile:hover { border-color: var(--accent); background: var(--card-bg); }
       .tile.selected { border-color: var(--accent); background: var(--accent); color: white; }
       .tile input[type="radio"] { display: none; }
@@ -96,12 +105,22 @@ GAME_HTML = """
     <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />
     <title>Tic-Tac-Toe AI</title>
     <style>
-      :root { --tile: 110px; --gap: 10px; --primary: #f1f5f9; --border: #475569; --accent: #3b82f6; --muted: #94a3b8; --bg: #0f172a; --card-bg: #1e293b; --cell-bg: #334155; }
-      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 24px; color: var(--primary); background: var(--bg); }
-      .container { max-width: 480px; margin: 0 auto; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-      h1 { margin: 0 0 12px; font-size: 22px; display:flex; justify-content: space-between; align-items:center; }
-      .controls { display:flex; align-items:center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
-      button, .button { padding: 8px 12px; border-radius: 8px; background: var(--accent); color: white; border: none; text-decoration: none; display: inline-block; }
+      :root { --tile: 110px; --gap: 10px; --primary: #e5e7eb; --border: #2c3a52; --accent: #7a2436; --muted: #9aa4b2; --bg: #0b0f1a; --card-bg: #111827; --cell-bg: #1f2a3a; }
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; min-height: 100vh; display: grid; place-items: center; color: var(--primary); background:
+        radial-gradient(900px 420px at 85% -10%, rgba(122,36,54,.14), transparent 60%),
+        radial-gradient(720px 380px at 10% 110%, rgba(122,36,54,.08), transparent 60%),
+        radial-gradient(700px 360px at -10% 20%, rgba(34,197,94,.10), transparent 55%),
+        linear-gradient(180deg, #0b0f1a, #0e1422); position: relative; }
+      body::after { content: ""; position: fixed; inset: 0; pointer-events: none; background:
+        radial-gradient(1200px 700px at 50% -10%, rgba(0,0,0,.25), transparent 60%),
+        radial-gradient(1200px 800px at 50% 120%, rgba(0,0,0,.35), transparent 60%);
+        }
+      .container { width: 720px; margin: 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 0px; padding: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.45), 0 0 0 1px rgba(122,36,54,.10) inset; }
+      h1 { margin: 0 0 12px; font-size: 26px; display:flex; justify-content: space-between; align-items:center; letter-spacing: .01em; text-shadow: 0 6px 26px rgba(122,36,54,.25), 0 1px 0 rgba(255,255,255,.04); }
+      .controls { display:flex; align-items:center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+      button, .button { padding: 8px 12px; border-radius: 8px; background: linear-gradient(180deg, #7a2436, #5a1c2a); color: white; border: 1px solid rgba(255,255,255,.06); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 14px 30px rgba(0,0,0,.35), 0 0 0 1px rgba(122,36,54,.18) inset; transition: transform .12s ease, box-shadow .2s ease, filter .2s ease; }
+      .controls button, .controls .button { width: 120px; height: 38px; padding: 0 12px; }
+      button:hover, .button:hover { transform: translateY(-1px); box-shadow: 0 16px 36px rgba(162,59,91,.45); filter: saturate(1.02); }
       button:disabled { background: #475569; }
       .tile-group { display: flex; gap: 8px; flex-wrap: wrap; }
       .tile { padding: 8px 12px; border: 2px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--primary); cursor: pointer; transition: all 0.2s ease; text-align: center; min-width: 60px; }
@@ -109,10 +128,11 @@ GAME_HTML = """
       .tile.selected { border-color: var(--accent); background: var(--accent); color: white; }
       .tile input[type="radio"] { display: none; }
       .status { margin: 10px 0 16px; font-weight: 600; color: var(--muted); min-height: 22px; }
-      .board { display: grid; grid-template-columns: repeat(3, var(--tile)); grid-gap: var(--gap); justify-content:center; }
-      .cell { width: var(--tile); height: var(--tile); border: 2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size: 56px; cursor: pointer; user-select: none; border-radius: 12px; background: var(--cell-bg); transition: transform .05s ease; }
+      .board { display: grid; grid-template-columns: repeat(3, var(--tile)); grid-gap: var(--gap); justify-content:center; padding: 10px; border: 1px solid rgba(255,255,255,.04); background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); filter: drop-shadow(0 24px 40px rgba(0,0,0,.45)); }
+      .cell { width: var(--tile); height: var(--tile); border: 2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size: 56px; cursor: pointer; user-select: none; border-radius: 12px; background: var(--cell-bg); transition: transform .05s ease, box-shadow .2s ease; box-shadow: inset 0 1px 0 rgba(255,255,255,.04); }
       .cell:hover { transform: translateY(-1px); }
-      .cell.disabled { cursor: not-allowed; color: #64748b; background: #1e293b; }
+      .cell.disabled { cursor: not-allowed; color: #8a9bb5; background: #0f172a; }
+      .cell.highlight { background: #14532d; color: #22c55e; border-color: #16a34a; box-shadow: 0 0 0 3px rgba(34,197,94,.15) inset; }
       .legend { margin-top: 14px; font-size: 13px; color: var(--muted); text-align:center; }
       .name { font-size: 14px; color: var(--muted); }
     </style>
@@ -139,23 +159,42 @@ GAME_HTML = """
       const boardEl = document.getElementById('board');
       const statusEl = document.getElementById('status');
       const newBtn = document.getElementById('new');
+      let resultBtn;
 
       let board = Array(9).fill(' ');
       let human = '{{ human }}';
       let ai = human === 'X' ? 'O' : 'X';
       let current = 'X';
       let gameOver = false;
+      let winningLine = [];
+
+      function ensureResultButton() {
+        if (!resultBtn) {
+          const btn = document.createElement('a');
+          btn.href = '#';
+          btn.id = 'resultBtn';
+          btn.className = 'button';
+          btn.style.marginLeft = '8px';
+          btn.textContent = 'View Result';
+          document.querySelector('.controls').appendChild(btn);
+          resultBtn = btn;
+        }
+        resultBtn.style.display = gameOver ? '' : 'none';
+      }
 
       function render() {
         boardEl.innerHTML = '';
         board.forEach((cell, idx) => {
           const div = document.createElement('div');
-          div.className = 'cell' + (gameOver || cell !== ' ' ? ' disabled' : '');
+          const disabled = (gameOver || cell !== ' ');
+          const hl = gameOver && winningLine.includes(idx) ? ' highlight' : '';
+          div.className = 'cell' + (disabled ? ' disabled' : '') + hl;
           div.textContent = cell;
           div.addEventListener('click', () => onCellClick(idx));
           boardEl.appendChild(div);
         });
-        statusEl.textContent = `Turn: ${current}`;
+        statusEl.textContent = gameOver ? statusEl.textContent : `Turn: ${current}`;
+        ensureResultButton();
       }
 
       async function startServerGame() {
@@ -166,6 +205,7 @@ GAME_HTML = """
         board = Array(9).fill(' ');
         current = 'X';
         gameOver = false;
+        winningLine = [];
         human = '{{ human }}';
         ai = human === 'X' ? 'O' : 'X';
         await startServerGame();
@@ -189,10 +229,15 @@ GAME_HTML = """
         current = data.next;
         gameOver = data.gameOver;
         statusEl.textContent = data.status;
+        winningLine = Array.isArray(data.winningLine) ? data.winningLine : [];
         if (gameOver) {
-          const winner = data.status.startsWith('Winner: ') ? data.status.split(': ')[1] : '';
-          const params = new URLSearchParams({ result: winner ? 'win' : 'draw', winner, human, ai });
-          window.location.href = `/result?${params.toString()}`;
+          // keep final board visible and show result button
+          render();
+          if (resultBtn) {
+            const winner = data.status.startsWith('Winner: ') ? data.status.split(': ')[1] : '';
+            const params = new URLSearchParams({ result: winner ? 'win' : 'draw', winner, human, ai });
+            resultBtn.onclick = (e) => { e.preventDefault(); window.location.href = `/result?${params.toString()}`; };
+          }
           return;
         }
         render();
@@ -287,6 +332,12 @@ def ai_move():
     game = TicTacToe()
     game.board = [c if c in ("X", "O") else " " for c in board]
 
+    # Freeze duration at the exact moment the game ends
+    def freeze_duration():
+        started = session.get("game_started_at")
+        if isinstance(started, (int, float)) and session.get("last_duration_seconds") is None:
+            session["last_duration_seconds"] = int(max(0, time.time() - started))
+
     # Helper to increment per-level stats in session
     def inc_level_stat(level: str, key: str):
         stats = session.get("level_stats") or {}
@@ -303,6 +354,8 @@ def ai_move():
         status = "Draw" if winner is None else f"Winner: {winner}"
         ai_player = payload.get("ai", "O")
         human_player = other_player(ai_player)
+        wl = game.winning_line() or []
+        freeze_duration()
         if winner is None:
             session["draws"] = session.get("draws", 0) + 1
             inc_level_stat(mode, "draws")
@@ -317,6 +370,7 @@ def ai_move():
             "next": current,
             "status": status,
             "gameOver": True,
+            "winningLine": wl,
         })
 
     # Ensure it's AI's turn; if not, just echo
@@ -365,7 +419,9 @@ def ai_move():
 
     if move == -1:  # no move
         status = "Draw"
-        return jsonify({"board": game.board, "next": current, "status": status, "gameOver": True})
+        wl = game.winning_line() or []
+        freeze_duration()
+        return jsonify({"board": game.board, "next": current, "status": status, "gameOver": True, "winningLine": wl})
 
     result = game.make_move(move, ai_player)
     if result.winner:
@@ -400,11 +456,15 @@ def ai_move():
         game_over = False
         next_turn = other_player(ai_player)
 
+    if game_over:
+        freeze_duration()
+
     return jsonify({
         "board": result.board,
         "next": next_turn,
         "status": status,
         "gameOver": game_over,
+        "winningLine": (game.winning_line() or []) if game_over else [],
     })
 
 
@@ -416,9 +476,15 @@ RESULT_HTML = """
     <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />
     <title>Game Result</title>
     <style>
-      :root { --win: #22c55e; --loss: #ef4444; --draw: #94a3b8; --card: #0b1220; --bg: #0f172a; --accent: #3b82f6; --border: #22314a; --text-muted: #94a3b8; --glow:#60a5fa; }
-      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; min-height: 100vh; display: grid; place-items: center; color: #eaf2ff; background: radial-gradient(1200px 600px at 80% -20%, rgba(59,130,246,.25), transparent 60%), radial-gradient(800px 500px at -10% 20%, rgba(16,185,129,.18), transparent 55%), linear-gradient(180deg, #0b1220, #0f172a); }
-      .card { width: min(720px, 94vw); background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border: 1px solid var(--border); border-radius: 18px; padding: 28px 22px; box-shadow: 0 20px 60px rgba(0,0,0,0.45), 0 0 0 1px rgba(99,102,241,.05) inset; text-align: center; position: relative; overflow: hidden; backdrop-filter: blur(6px); }
+      :root { --win: #22c55e; --loss: #ef4444; --draw: #9aa4b2; --card: #0b0f1a; --bg: #0b0f1a; --accent: #7a2436; --border: #273244; --text-muted: #9aa4b2; --glow:#7a2436; }
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; min-height: 100vh; display: grid; place-items: center; color: #e5e7eb; background:
+        radial-gradient(1100px 520px at 80% -20%, rgba(122,36,54,.20), transparent 60%),
+        radial-gradient(900px 480px at -10% 20%, rgba(34,197,94,.12), transparent 55%),
+        linear-gradient(180deg, #0b0f1a, #0e1422); position: relative; }
+      body::after { content: ""; position: fixed; inset: 0; pointer-events: none; background:
+        radial-gradient(1200px 700px at 50% -10%, rgba(0,0,0,.25), transparent 60%),
+        radial-gradient(1200px 800px at 50% 120%, rgba(0,0,0,.35), transparent 60%); }
+      .card { width: min(720px, 94vw); background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border: 1px solid var(--border); border-radius: 18px; padding: 28px 22px; box-shadow: 0 24px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(122,36,54,.12) inset; text-align: center; position: relative; overflow: hidden; backdrop-filter: blur(8px); }
       .card:before { content: ""; position: absolute; inset: -2px; border-radius: 20px; padding: 1px; background: linear-gradient(120deg, rgba(96,165,250,.45), rgba(34,197,94,.35), rgba(99,102,241,.35)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
       h1 { margin: 10px 0 8px; font-size: 30px; font-weight: 800; background: linear-gradient(90deg, #fff, #c7d2fe, #93c5fd); -webkit-background-clip: text; background-clip: text; color: transparent; animation: shine 6s linear infinite; letter-spacing: .02em; }
       @keyframes shine { 0% { filter: drop-shadow(0 0 0 rgba(96,165,250,0)); } 50% { filter: drop-shadow(0 0 18px rgba(96,165,250,.25)); } 100% { filter: drop-shadow(0 0 0 rgba(96,165,250,0)); } }
@@ -433,18 +499,18 @@ RESULT_HTML = """
       .score-card { border: 1px solid var(--border); border-radius: 14px; padding: 14px; background: linear-gradient(180deg, #0f172a, #0b1220); box-shadow: 0 8px 24px rgba(0,0,0,.25), 0 1px 0 rgba(255,255,255,.04) inset; }
       .score-title { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .12em; }
       .score-value { font-size: 24px; font-weight: 800; }
-      a.button { display: inline-block; padding: 11px 16px; background: linear-gradient(180deg, #3b82f6, #2563eb); color: #fff; text-decoration: none; border-radius: 12px; box-shadow: 0 10px 24px rgba(59,130,246,.35); transition: transform .12s ease, box-shadow .2s ease, filter .2s ease; border: 1px solid rgba(255,255,255,.06); }
-      a.button:hover { transform: translateY(-1px); box-shadow: 0 14px 32px rgba(59,130,246,.45); filter: saturate(1.1); }
+      a.button { display: inline-block; padding: 11px 16px; background: linear-gradient(180deg, #7a2436, #5a1c2a); color: #fff; text-decoration: none; border-radius: 12px; box-shadow: 0 14px 30px rgba(0,0,0,.35), 0 0 0 1px rgba(122,36,54,.18) inset; transition: transform .12s ease, box-shadow .2s ease, filter .2s ease; border: 1px solid rgba(255,255,255,.06); }
+      a.button:hover { transform: translateY(-1px); box-shadow: 0 18px 38px rgba(0,0,0,.45); filter: saturate(1.01); }
       .confetti { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 999; }
       .confetti span { position: absolute; top: -20px; width: 10px; height: 14px; opacity: 1; animation: fall linear forwards; border-radius: 3px; }
       @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(720deg); opacity: 1; } }
       .row { margin-bottom: 10px; }
-      .time-panel { border:1px solid var(--border); background: linear-gradient(180deg, #0f172a, #0b1220); border-radius:14px; padding:12px; margin: 12px auto 16px; text-align:left; box-shadow: 0 8px 24px rgba(0,0,0,.25), 0 1px 0 rgba(255,255,255,.04) inset; }
+      .time-panel { border:1px solid var(--border); background: linear-gradient(180deg, #0f172a, #0b1220); border-radius:14px; padding:12px; margin: 12px auto 16px; text-align:left; box-shadow: 0 10px 30px rgba(0,0,0,.35), 0 1px 0 rgba(255,255,255,.04) inset; }
       .time-flex { display:flex; align-items:center; justify-content:space-between; gap:10px; }
       .time-value { font-size:22px; font-weight:800; }
       .time-best { font-size:13px; color: var(--text-muted); }
       .bar { height:10px; background: #1f2b3f; border-radius:999px; overflow:hidden; margin-top:8px; box-shadow: inset 0 1px 0 rgba(255,255,255,.05); }
-      .bar > div { height:100%; background: linear-gradient(90deg, #60a5fa, #3b82f6); width:0; transition: width .9s ease; box-shadow: 0 0 12px rgba(96,165,250,.6); }
+      .bar > div { height:100%; background: linear-gradient(90deg, #7a2436, #5a1c2a); width:0; transition: width .9s ease; box-shadow: 0 0 12px rgba(122,36,54,.55); }
       .trophy { width: 54px; height: 54px; margin: 0 auto 6px; display: grid; place-items: center; filter: drop-shadow(0 6px 20px rgba(234,179,8,.2)); }
     </style>
   </head>

@@ -65,6 +65,18 @@ class TicTacToe:
                 return self.board[a]
         return None
 
+    def winning_line(self) -> Optional[Tuple[int, int, int]]:
+        """Return the indices of the winning line, if any."""
+        lines: Tuple[Tuple[int, int, int], ...] = (
+            (0, 1, 2), (3, 4, 5), (6, 7, 8),  # rows
+            (0, 3, 6), (1, 4, 7), (2, 5, 8),  # cols
+            (0, 4, 8), (2, 4, 6),             # diagonals
+        )
+        for a, b, c in lines:
+            if self.board[a] != " " and self.board[a] == self.board[b] == self.board[c]:
+                return (a, b, c)
+        return None
+
 
 def minimax_best_move(game: TicTacToe, current_player: Player, ai_player: Player) -> int:
     best_score = float("-inf")
