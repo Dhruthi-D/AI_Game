@@ -143,11 +143,17 @@ GAME_HTML = """
         Tic-Tac-Toe vs AI
         <div style=\"display: flex; flex-direction: column; align-items: flex-end; gap: 4px;\">
           <span class=\"name\">Player: {{ player_name }}</span>
-          <span class=\"name\">Level: {{ mode.title() }}</span>
+          <span class=\"name\">Level: <span id=\"levelText\">{{ mode.title() }}</span></span>
         </div>
       </h1>
       <div class=\"controls\">
         <button id=\"new\">New Game</button>
+        <label class=\"name\" for=\"level\" style=\"margin-left:8px;\">Level</label>
+        <select id=\"level\" class=\"button\" style=\"width:auto; height:38px; background:#0b0f1a; border:1px solid rgba(255,255,255,.06); color:#e5e7eb;\">
+          <option value=\"beginner\" {{ 'selected' if mode=='beginner' else '' }}>Beginner</option>
+          <option value=\"intermediate\" {{ 'selected' if mode=='intermediate' else '' }}>Intermediate</option>
+          <option value=\"expert\" {{ 'selected' if mode=='expert' else '' }}>Expert</option>
+        </select>
         <a href=\"/start\" class=\"button\">Home</a>
       </div>
       <div class=\"status\" id=\"status\"></div>
@@ -182,6 +188,19 @@ GAME_HTML = """
         resultBtn.style.display = gameOver ? '' : 'none';
       }
 
+      function getMode() {
+        const sel = document.getElementById('level');
+        return sel ? sel.value : '{{ mode }}';
+      }
+
+      function syncLevelLabel() {
+        const txt = document.getElementById('levelText');
+        if (txt) {
+          const m = getMode();
+          txt.textContent = m.charAt(0).toUpperCase() + m.slice(1);
+        }
+      }
+
       function render() {
         boardEl.innerHTML = '';
         board.forEach((cell, idx) => {
@@ -198,7 +217,9 @@ GAME_HTML = """
       }
 
       async function startServerGame() {
-        await fetch('/new-game', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mode: '{{ mode }}' }) });
+        const mode = getMode();
+        await fetch('/new-game', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mode }) });
+        syncLevelLabel();
       }
 
       async function reset() {
@@ -223,7 +244,7 @@ GAME_HTML = """
 
       async function aiMove() {
         if (gameOver) return;
-        const res = await fetch('/ai-move', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ board, current, ai, mode: '{{ mode }}' }) });
+        const res = await fetch('/ai-move', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ board, current, ai, mode: getMode() }) });
         const data = await res.json();
         board = data.board;
         current = data.next;
@@ -244,6 +265,13 @@ GAME_HTML = """
       }
 
       newBtn.addEventListener('click', reset);
+      const levelSel = document.getElementById('level');
+      if (levelSel) {
+        levelSel.addEventListener('change', async () => {
+          await startServerGame();
+          await reset();
+        });
+      }
       // Start first game
       reset();
     </script>
@@ -619,7 +647,8 @@ RESULT_HTML = """
         <a class="button" id="shareBtn" style="margin-left:8px">Share Result</a>
         <a class="button" href="/start" style="margin-left:8px">Home</a>
       </div>
-      <div id="confetti" class="confetti"></div>
+      <!-- Confetti disabled to remove colored line artifact on some displays -->
+      <!-- <div id="confetti" class="confetti"></div> -->
     </div>
     <script>
       const params = new URLSearchParams(window.location.search);
@@ -655,6 +684,7 @@ RESULT_HTML = """
       }
 
       function makeConfetti() {
+        return; // disabled
         const colors = ['#fbbf24','#34d399','#60a5fa','#f472b6','#f97316','#a78bfa'];
         const count = 120;
         for (let i=0;i<count;i++) {
@@ -668,11 +698,11 @@ RESULT_HTML = """
           piece.style.transform = `translateY(-10vh) rotate(${Math.random()*360}deg)`;
           piece.style.animationDuration = dur + 's';
           piece.style.animationDelay = delay + 's';
-          confetti.appendChild(piece);
+          if (confetti) confetti.appendChild(piece);
         }
         // Force a repaint to start animations in some browsers
         // by reading offsetHeight after appending
-        void confetti.offsetHeight;
+        if (confetti) void confetti.offsetHeight;
       }
 
       // pretty time (m:ss)
